@@ -64,7 +64,6 @@ class OutfitWidgetProvider : AppWidgetProvider() {
 
         val views = RemoteViews(context.packageName, R.layout.widget_outfit)
 
-        // 새로고침 버튼 연결
         val refreshIntent = Intent(context, OutfitWidgetProvider::class.java).apply { action = ACTION_REFRESH }
         val refreshPending = PendingIntent.getBroadcast(
             context, 0, refreshIntent,
@@ -72,7 +71,6 @@ class OutfitWidgetProvider : AppWidgetProvider() {
         )
         views.setOnClickPendingIntent(R.id.btnRefresh, refreshPending)
 
-        // 위젯 본문 탭 시: 주소가 있으면 규칙 설정 웹 열기, 없으면 앱 설정 열기
         val openIntent = if (workerUrl.startsWith("http")) {
             Intent(Intent.ACTION_VIEW, Uri.parse(workerUrl))
         } else {
@@ -85,8 +83,9 @@ class OutfitWidgetProvider : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.widgetRoot, openPending)
 
         if (!workerUrl.startsWith("http")) {
-            views.setTextViewText(R.id.tvHeader, "초기 설정 필요")
-            views.setTextViewText(R.id.tvDailyOutfit, "Worker 주소를 입력해 주세요")
+            views.setTextViewText(R.id.tvDate, "초기 설정 필요")
+            views.setTextViewText(R.id.tvTempBig, "--°")
+            views.setTextViewText(R.id.tvDailyOutfit, "주소를 입력해 주세요")
             views.setTextViewText(R.id.tvDailyMsg, "여기를 탭하면 설정 화면으로 이동합니다.")
             ids.forEach { manager.updateAppWidget(it, views) }
             return
@@ -115,7 +114,7 @@ class OutfitWidgetProvider : AppWidgetProvider() {
             val kidsOutfit = json.optString("kidsOutfit", "")
             val kidsMsg = json.optString("kidsMsg", "")
 
-            // 날씨별 컬러 블록 스플릿 테마 자동 선택
+            // 날씨별 감성 플랫 컬러 블록 테마
             val isDustBad = dustGrade.contains("나쁨")
             val topBgHex: String
             val bottomBgHex: String
@@ -124,26 +123,26 @@ class OutfitWidgetProvider : AppWidgetProvider() {
 
             when {
                 hasRain -> {
-                    topBgHex = "#DBEAFE"     // 비 오는 날: 차분한 블루
-                    bottomBgHex = "#FFEDD5"  // 아이들 블록: 따뜻한 피치
+                    topBgHex = "#CFE4FF"     // 비 오는 날: 부드러운 레인 블루
+                    bottomBgHex = "#FFE4C4"  // 아이들 블록: 따뜻한 아프리콧
                     pillBgHex = "#0369A1"
                     weatherIcon = "☔"
                 }
                 isDustBad -> {
-                    topBgHex = "#F5F5F4"     // 미세먼지 나쁨: 웜 스톤
-                    bottomBgHex = "#FEF08A"  // 아이들 블록: 선명한 옐로우
+                    topBgHex = "#EFECE6"     // 미세먼지 나쁨: 웜 샌드
+                    bottomBgHex = "#FDE68A"  // 아이들 블록: 웜 옐로우
                     pillBgHex = "#B91C1C"
                     weatherIcon = "😷"
                 }
                 maxTemp <= 5 -> {
-                    topBgHex = "#E2E8F0"     // 한파: 쿨 슬레이트
-                    bottomBgHex = "#FFEDD5"  // 아이들 블록: 포근한 피치
-                    pillBgHex = "#1E293B"
+                    topBgHex = "#DCEEFF"     // 한파: 산뜻한 아이스 블루
+                    bottomBgHex = "#FFE8B6"  // 아이들 블록: 포근한 버터 피치
+                    pillBgHex = "#1E3A8A"
                     weatherIcon = "❄️"
                 }
                 else -> {
-                    topBgHex = "#E0F2FE"     // 맑은 날: 산뜻한 스카이
-                    bottomBgHex = "#FEF3C7"  // 아이들 블록: 버터 옐로우
+                    topBgHex = "#D6F4FF"     // 맑은 날: 경쾌한 스카이 블루
+                    bottomBgHex = "#FEF08A"  // 아이들 블록: 화사한 레몬 옐로우
                     pillBgHex = "#0284C7"
                     weatherIcon = "☀️"
                 }
@@ -153,7 +152,10 @@ class OutfitWidgetProvider : AppWidgetProvider() {
             views.setColorStateList(R.id.bottomContainer, "setBackgroundTintList", ColorStateList.valueOf(Color.parseColor(bottomBgHex)))
             views.setColorStateList(R.id.tvBadge, "setBackgroundTintList", ColorStateList.valueOf(Color.parseColor(pillBgHex)))
 
-            views.setTextViewText(R.id.tvHeader, "$weatherIcon $dateLabel · ${minTemp}° / ${maxTemp}°")
+            views.setTextViewText(R.id.tvDate, dateLabel)
+            views.setTextViewText(R.id.tvWeatherIcon, weatherIcon)
+            views.setTextViewText(R.id.tvTempBig, "${minTemp}°/${maxTemp}°")
+
             val badgeText = if (hasRain) umbrellaBadge else "미세 $dustGrade"
             views.setTextViewText(R.id.tvBadge, badgeText)
 
@@ -170,8 +172,8 @@ class OutfitWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(R.id.tvKidsOutfit, kidsOutfit)
             views.setTextViewText(R.id.tvKidsMsg, kidsMsg)
         } catch (e: Exception) {
-            views.setTextViewText(R.id.tvHeader, "업데이트 실패 (↻ 눌러 재시도)")
-            views.setTextViewText(R.id.tvDailyMsg, "네트워크 또는 Worker 주소를 확인해 주세요.")
+            views.setTextViewText(R.id.tvDate, "업데이트 실패")
+            views.setTextViewText(R.id.tvDailyMsg, "↻ 버튼을 눌러 다시 시도해 주세요.")
         }
 
         ids.forEach { manager.updateAppWidget(it, views) }

@@ -6,116 +6,167 @@
     android:orientation="vertical"
     android:padding="2dp">
 
-    <!-- 상단 블록: 본인 옷차림 · 자전거 · 날씨 (날씨별 컬러 자동 변화) -->
+    <!-- 상단 블록: 본인 옷차림 · 날씨 · 자전거 -->
     <LinearLayout
         android:id="@+id/topContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.35"
+        android:layout_weight="1.5"
         android:background="@drawable/bg_top_block"
         android:orientation="vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="14dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="10dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="18dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="14dp">
 
-        <!-- 헤더: 날짜·기온 + 우산/미세먼지 배지 + 새로고침 -->
+        <!-- 1행: 날짜/배지 (좌) + 큰 기온/새로고침 (우) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvHeader"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="불러오는 중..."
-                android:textColor="#0F172A"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11.24 (화)"
+                    android:textColor="#475569"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:text="미세 좋음"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tvBadge"
+                android:id="@+id/tvWeatherIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
-                android:background="@drawable/bg_pill"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
-                android:text="☀️ 맑음"
-                android:textColor="#FFFFFF"
-                android:textSize="10sp"
+                android:text="☀️"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/tvTempBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-3°/5°"
+                android:textColor="#0F172A"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/btnRefresh"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="6dp"
                 android:gravity="center"
                 android:text="↻"
                 android:textColor="#334155"
-                android:textSize="16sp"
+                android:textSize="19sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- 강조: 오늘 본인 옷차림 (큰 텍스트) -->
-        <TextView
-            android:id="@+id/tvDailyOutfit"
+        <!-- 중앙 여백 자동 분배 -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="앱에서 주소를 설정해 주세요"
-            android:textColor="#0F172A"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
 
-        <!-- 친절한 평상시 문구 -->
-        <TextView
-            android:id="@+id/tvDailyMsg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="위젯을 누르면 설정 화면으로 이동해요."
-            android:textColor="#334155"
-            android:textSize="11.5sp" />
+            <!-- 강조: 오늘 본인 옷차림 (큰 고딕) -->
+            <TextView
+                android:id="@+id/tvDailyOutfit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="숏패딩 + 기모"
+                android:textColor="#0F172A"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
-        <!-- 자전거 한 줄 브리핑 -->
-        <TextView
-            android:id="@+id/tvBikeLine"
+            <!-- 친절한 평상시 문구 -->
+            <TextView
+                android:id="@+id/tvDailyMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="오늘 낮 최고 5℃예요. 든든하게 입으세요."
+                android:textColor="#334155"
+                android:textSize="13.5sp" />
+        </LinearLayout>
+
+        <!-- 자전거 상태 카드 (반투명 화이트 필) -->
+        <LinearLayout
+            android:id="@+id/bikeCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="🚲 자전거 정보 대기 중"
-            android:textColor="#0369A1"
-            android:textSize="11.5sp"
-            android:textStyle="bold" />
+            android:background="@drawable/bg_bike_card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/tvBikeLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="🚲 자전거 정보 대기 중"
+                android:textColor="#0369A1"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- 하단 블록: 아이들 등교 전용 (확실한 컬러 분리) -->
+    <!-- 하단 블록: 아이들 등교 전용 (따뜻한 컬러 블록 분리) -->
     <LinearLayout
         android:id="@+id/bottomContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.95"
+        android:layout_weight="0.85"
         android:background="@drawable/bg_bottom_block"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="10dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,9 +178,14 @@
                 android:id="@+id/tvKidsLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_kids_pill"
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
                 android:text="🎒 아이들 등교"
-                android:textColor="#92400E"
+                android:textColor="#FFFFFF"
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
@@ -140,9 +196,9 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="등교 옷차림 준비 중"
-                android:textColor="#78350F"
-                android:textSize="14.5sp"
+                android:text="두꺼운 패딩 + 기모바지"
+                android:textColor="#5C2D0C"
+                android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -150,11 +206,11 @@
             android:id="@+id/tvKidsMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="아침 등교길 기온에 맞춰 알려드릴게요."
+            android:text="등교길 기온에 맞춰 따뜻하게 입혀주세요."
             android:textColor="#78350F"
-            android:textSize="11.5sp" />
+            android:textSize="13.5sp" />
     </LinearLayout>
 </LinearLayout>
